@@ -5,6 +5,7 @@ import { AppContext } from '../../contexts';
 import { Loader } from '../../components';
 import toastService from '../../services';
 import './bind-submission.css';
+import dbService from '../../services/dbService';
 
 const BindSubmission = () => {
 	const [openFileSelector, {plainFiles, loading, errors}] = useFilePicker({
@@ -13,6 +14,7 @@ const BindSubmission = () => {
 	});
 
 	const sendToServer = () => {
+		// dbService.updateSubmission()
 		toastService.onSuccess('File uploaded Successfully');
 	};
 

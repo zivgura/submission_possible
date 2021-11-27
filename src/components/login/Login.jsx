@@ -1,7 +1,9 @@
 import React, { useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
+import dbService from '../../services/dbService';
 import './login.css';
+import toastService from '../../services/toastService';
 
 const Login = () => {
 	const history = useHistory();
@@ -10,28 +12,26 @@ const Login = () => {
 	const password = useRef();
 
 	const onSubmit = () => {
-		const data = [
-			{
-				id: 'Hello',
-				status: 'World',
-				actions: ['EDIT', 'BIND']
-			},
-			{
-				id: 'react-table',
-				status: 'rocks',
-			},
-			{
-				id: 'whatever',
-				status: 'you want',
-			},
-		];
+		const tryLogin = async () => {
+			try {
+				const response = await dbService.tryLogin(email.current.value, password.current.value);
+				const submissionsResponse = await dbService.getSubmissions(email.current.value);
+				const {data: submissions} = await submissionsResponse.json();
+				const data = submissions.map(submission => dbService.prepareSubmissionsForTable(submission));
 
-		setState({
-			...state,
-			data
-		});
+				setState({
+					...state,
+					data,
+					email: email.current.value
+				});
 
-		history.push('/submissions');
+				history.push('/submissions');
+			} catch (error) {
+				toastService.onError('Failed to log in \n Please try again');
+			}
+		}
+
+		tryLogin();
 	};
 
 	return (
@@ -42,15 +42,15 @@ const Login = () => {
 			</div>
 
 			<div className='login-field'>
-				<label>
-					Password:
-					<input placeholder='Enter password' type='password' ref={password}/>
-				</label>
+				Password:
+				<input placeholder='Enter password' type='password' ref={password}/>
 			</div>
 
-			<button className='login-button' onClick={onSubmit}>
-				Login
-			</button>
+			<div className='login-action'>
+				<button className='login-button' onClick={onSubmit}>
+					Login
+				</button>
+			</div>
 		</div>
 	);
 };

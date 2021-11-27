@@ -1,33 +1,35 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
+import dbService from '../../services/dbService';
 
 const SubmissionForm = () => {
 	const history = useHistory();
 	const formPurpose = history.location.state;
 	const {state, setState} = useContext(AppContext);
-	console.log(state,'state');
+	const {submissionFromDb, setSubmissionFromDb} = useState(null);
 	const companyNameRef = useRef();
 	const physicalAddressRef = useRef();
 	const annualRevenueRef = useRef();
 
-	const getSubmissionDetails = (submissionId) => {
-		return {
-			companyName: 'Sataya',
-			physicalAddress: 'TLV',
-			annualRevenue: '100000000$'
-		}
+	const getSubmissionDetails = async (submissionId) => {
+		const response = await dbService.getSubmissionById(submissionId)
+		const {data} = await response.json();
+		setSubmissionFromDb(data[0]);
+		return dbService.prepareSubmissionForEdit(data[0]);
 	};
 
-	const onSave = () => {
-		//update record
-		const newRecord = {
+	const onSave = async () => {
+		const updatedDetails = {
 			companyName: companyNameRef.current.value,
 			physicalAddress: physicalAddressRef.current.value,
 			annualRevenue: annualRevenueRef.current.value
 		}
 
 		if (formPurpose === 'edit') {
+			const submissionForDb = dbService.prepareSubmissionForDb(updatedDetails, submissionFromDb);
+			await dbService.updateSubmission(state.email, submissionForDb);
+
 			setState({
 				...state,
 				currentRecordId: null
@@ -36,21 +38,31 @@ const SubmissionForm = () => {
 			history.push('/submissions');
 		}
 		else {
+			await dbService.addNewSubmission(state.email, updatedDetails);
+
+			setState({
+				...state,
+				currentRecordId: null// new record ID
+			});
+			
 			history.push('/bind');
 		}
 	};
 
 	useEffect(() => {
-		//get record details
-		const {currentRecordId} = state;
+		const getDetails = async () => {
+			const {currentRecordId} = state;
 
-		const recordInfo = currentRecordId
-			? getSubmissionDetails(currentRecordId)
-			: {}
+			const recordInfo = currentRecordId
+				? await getSubmissionDetails(currentRecordId)
+				: {}
 
-		companyNameRef.current.value = recordInfo.companyName;
-		physicalAddressRef.current.value = recordInfo.physicalAddress;
-		annualRevenueRef.current.value = recordInfo.annualRevenue;
+			companyNameRef.current.value = recordInfo.companyName;
+			physicalAddressRef.current.value = recordInfo.physicalAddress;
+			annualRevenueRef.current.value = recordInfo.annualRevenue;
+		}
+
+		getDetails();
 	}, [state]);
 
 	return (
