@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { Login, Submissions } from './components';
+import { Login, SubmissionsTable, SubmissionForm, BindSubmission } from './components';
 
 const Router = () => (
 	<Switch>
@@ -8,7 +8,9 @@ const Router = () => (
 			<Redirect to='/login'/>
 		</Route>
 		<Route path='/login' component={Login} />
-		<Route path='/submissions' component={Submissions} />
+		<Route exact path='/submissions' component={SubmissionsTable} />
+		<Route exact path='/submission' component={SubmissionForm} />
+		<Route exact path='/bind' component={BindSubmission} />
 	</Switch>
 );
 

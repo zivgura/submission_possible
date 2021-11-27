@@ -5,7 +5,7 @@ import './login.css';
 
 const Login = () => {
 	const history = useHistory();
-	const {setState} = useContext(AppContext);
+	const {state, setState} = useContext(AppContext);
 	const email = useRef();
 	const password = useRef();
 
@@ -14,7 +14,7 @@ const Login = () => {
 			{
 				id: 'Hello',
 				status: 'World',
-				actions: ['BIND']
+				actions: ['EDIT', 'BIND']
 			},
 			{
 				id: 'react-table',
@@ -26,7 +26,11 @@ const Login = () => {
 			},
 		];
 
-		setState({data});
+		setState({
+			...state,
+			data
+		});
+
 		history.push('/submissions');
 	};
 
@@ -34,13 +38,15 @@ const Login = () => {
 		<div className='login'>
 			<div className='login-field'>
 				Email:
-				<input placeholder='Enter Email Address' type='email' ref={email}/>
+				<input placeholder='Enter email address' type='email' ref={email}/>
 			</div>
 
-			<label>
-				Password:
-				<input placeholder='Enter Password' type='password' ref={password}/>
-			</label>
+			<div className='login-field'>
+				<label>
+					Password:
+					<input placeholder='Enter password' type='password' ref={password}/>
+				</label>
+			</div>
 
 			<button className='login-button' onClick={onSubmit}>
 				Login

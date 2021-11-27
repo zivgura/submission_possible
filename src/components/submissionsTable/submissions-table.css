@@ -1,0 +1,9 @@
+.submission-actions {
+	display: flex;
+}
+
+.submission-actions img {
+	height: 1.2rem;
+	width: 1.2rem;
+	cursor: pointer;
+}

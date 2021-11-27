@@ -1,14 +1,20 @@
-import React from 'react';
-import './navbar.css';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { ThemeButton } from '../index';
+import { AppContext } from '../../contexts';
+import './navbar.css';
 
 const Navbar = () => {
-	const onLoginClick = () => {
+	const history = useHistory();
+	const {state, setState} = useContext(AppContext);
 
+
+	const onLoginClick = () => {
+		history.push('/login');
 	};
 
 	const onSubmissionsClick = () => {
-
+		history.push('/submissions');
 	};
 
 	return (

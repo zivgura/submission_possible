@@ -1,11 +1,11 @@
 import tableConstants from '../../constants';
 
-const getActionsIcons = actions => (
+const getActionsInfo = actions => (
 	actions?.map(action => (
-		tableConstants.actionsIcons[action]
+		tableConstants.actionsInfo[action]
 	))
 );
 
 export default {
-	getActionsIcons
+	getActionsInfo
 };
