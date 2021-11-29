@@ -1,7 +1,7 @@
 import toastService from './toastService';
 import dbService from './dbService';
 
-export default {
+export {
 	toastService,
 	dbService
 };

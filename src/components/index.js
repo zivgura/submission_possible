@@ -1,6 +1,7 @@
 import Navbar from './navbar';
 import ThemeButton from './themeButton';
 import Login from './login';
+import Register from './register';
 import SubmissionsTable from './submissionsTable';
 import SubmissionForm from './submissionForm';
 import BindSubmission from './bindSubmission';
@@ -11,6 +12,7 @@ export {
     Navbar,
     ThemeButton,
     Login,
+    Register,
     SubmissionsTable,
     SubmissionForm,
     BindSubmission,

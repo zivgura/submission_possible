@@ -1,4 +1,12 @@
 .App {
-  text-align: center;
+	text-align: center;
 }
 
+.form-field {
+	display: flex;
+	justify-content: space-between;
+}
+
+button {
+	width: fit-content;
+}

@@ -9,7 +9,6 @@ import './submissions-table.css';
 const SubmissionsTable = () => {
 	const history = useHistory();
 	const {state, setState} = useContext(AppContext);
-	console.log(state, 'state');
 	const {data} = state;
 	const {columns} = tableConstants;
 
@@ -38,10 +37,12 @@ const SubmissionsTable = () => {
 		});
 	}, [history, setState, state]);
 
-	const formatterData = useMemo(() => (
+	const formattedData = useMemo(() => (
 		data.map(record => ({
 			...record,
-			actions: (<SubmissionActions record={record} iconsFunction={iconsFunction}/>)
+			actions: (
+				<SubmissionActions record={record} iconsFunction={iconsFunction}/>
+			)
 		}))), [data, iconsFunction]);
 
 	const {
@@ -50,7 +51,7 @@ const SubmissionsTable = () => {
 		headerGroups,
 		rows,
 		prepareRow,
-	} = useTable({columns, data: formatterData});
+	} = useTable({columns, data: formattedData});
 
 	return (
 		<table {...getTableProps()}>

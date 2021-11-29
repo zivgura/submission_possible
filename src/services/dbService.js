@@ -13,13 +13,26 @@ const tryLogin = async (email, password) => {
 	return response;
 };
 
+const tryRegister = async (email, password) => {
+	const response = await fetch(serverUrl + '/register', {
+		method: 'POST',
+		headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify({
+			email,
+			password
+		})
+	});
+
+	return await response.json();
+};
+
 const getSubmissions = async (email) => {
 	const response = await fetch(serverUrl + `/submissions/${email}`, {
 		method: 'GET',
 		headers: {'Content-Type': 'application/json'}
 	});
 
-	return response;
+	return await response.json();
 };
 
 const getSubmissionById = async (submissionId) => {
@@ -31,14 +44,24 @@ const getSubmissionById = async (submissionId) => {
 	return response;
 };
 
-const updateSubmission = async (email, submission) => {
+const updateSubmission = async (email, submissionId, updatedData) => {
 	const response = await fetch(serverUrl + '/update', {
 		method: 'POST',
 		headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			email,
-			data: submission
+			data: updatedData,
+			submissionId
 		})
+	});
+
+	return response;
+};
+
+const bindSubmission = async (formData) => {
+	const response = await fetch(serverUrl + '/bind', {
+		method: 'POST',
+		body: formData
 	});
 
 	return response;
@@ -80,9 +103,11 @@ const prepareSubmissionForDb = (updatedDetails, submissionFromDb) => ({
 
 export default {
 	tryLogin,
+	tryRegister,
 	getSubmissions,
 	updateSubmission,
 	addNewSubmission,
+	bindSubmission,
 	getSubmissionById,
 	prepareSubmissionsForTable,
 	prepareSubmissionForEdit,

@@ -1,9 +1,8 @@
 import React, { useContext, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
-import dbService from '../../services/dbService';
+import { dbService, toastService } from '../../services';
 import './login.css';
-import toastService from '../../services/toastService';
 
 const Login = () => {
 	const history = useHistory();
@@ -15,8 +14,7 @@ const Login = () => {
 		const tryLogin = async () => {
 			try {
 				const response = await dbService.tryLogin(email.current.value, password.current.value);
-				const submissionsResponse = await dbService.getSubmissions(email.current.value);
-				const {data: submissions} = await submissionsResponse.json();
+				const {data: submissions} = await dbService.getSubmissions(email.current.value);
 				const data = submissions.map(submission => dbService.prepareSubmissionsForTable(submission));
 
 				setState({
@@ -29,27 +27,33 @@ const Login = () => {
 			} catch (error) {
 				toastService.onError('Failed to log in \n Please try again');
 			}
-		}
+		};
 
 		tryLogin();
 	};
 
 	return (
 		<div className='login'>
-			<div className='login-field'>
+			<div className='form-field'>
 				Email:
 				<input placeholder='Enter email address' type='email' ref={email}/>
 			</div>
 
-			<div className='login-field'>
+			<div className='form-field'>
 				Password:
 				<input placeholder='Enter password' type='password' ref={password}/>
 			</div>
 
-			<div className='login-action'>
+			<div className='login-actions'>
 				<button className='login-button' onClick={onSubmit}>
 					Login
 				</button>
+
+				<div className='register-link'>
+					<Link to='/register'>
+						Not register yet? click here
+					</Link>
+				</div>
 			</div>
 		</div>
 	);

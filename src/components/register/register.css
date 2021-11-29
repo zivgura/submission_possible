@@ -1,4 +1,4 @@
-.login {
+.register {
 	display: flex;
 	flex-direction: column;
 	text-align: center;
@@ -11,12 +11,8 @@
 	color: black;
 }
 
-.login-actions {
+.register-actions {
 	display: flex;
-	justify-content: end;
+	justify-content: center;
 	align-items: center;
-}
-
-.login-actions .register-link {
-	font-size: 0.5rem;
 }

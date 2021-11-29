@@ -13,7 +13,7 @@ const SubmissionForm = () => {
 	const annualRevenueRef = useRef();
 
 	const getSubmissionDetails = async (submissionId) => {
-		const response = await dbService.getSubmissionById(submissionId)
+		const response = await dbService.getSubmissionById(submissionId);
 		const {data} = await response.json();
 		setSubmissionFromDb(data[0]);
 		return dbService.prepareSubmissionForEdit(data[0]);
@@ -24,7 +24,7 @@ const SubmissionForm = () => {
 			companyName: companyNameRef.current.value,
 			physicalAddress: physicalAddressRef.current.value,
 			annualRevenue: annualRevenueRef.current.value
-		}
+		};
 
 		if (formPurpose === 'edit') {
 			const submissionForDb = dbService.prepareSubmissionForDb(updatedDetails, submissionFromDb);
@@ -38,13 +38,14 @@ const SubmissionForm = () => {
 			history.push('/submissions');
 		}
 		else {
-			await dbService.addNewSubmission(state.email, updatedDetails);
+			const response = await dbService.addNewSubmission(state.email, updatedDetails);
+			const {newSubmissionId} = await response.json();
 
 			setState({
 				...state,
-				currentRecordId: null// new record ID
+				currentRecordId: newSubmissionId
 			});
-			
+
 			history.push('/bind');
 		}
 	};
@@ -55,12 +56,12 @@ const SubmissionForm = () => {
 
 			const recordInfo = currentRecordId
 				? await getSubmissionDetails(currentRecordId)
-				: {}
+				: {};
 
 			companyNameRef.current.value = recordInfo.companyName;
 			physicalAddressRef.current.value = recordInfo.physicalAddress;
 			annualRevenueRef.current.value = recordInfo.annualRevenue;
-		}
+		};
 
 		getDetails();
 	}, [state]);
