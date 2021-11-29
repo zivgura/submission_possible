@@ -18,7 +18,7 @@ submissions = {
             'status': 'BOND',
             'signedApplication': 'file',
             'submittedBy': 'Ziv',
-            'actions': ['EDIT']
+            'actions': []
         },
         {
             'id': '3',
@@ -51,3 +51,14 @@ def get(email):
 
 def get_by_id(submission_id):
     return [item for sublist in submissions.values() for item in sublist if item['id'] == submission_id]
+
+
+def update(email, submission_id, updates):
+    broker_submissions = get(email)
+    submission = [item for item in broker_submissions if item['id'] == submission_id][0]
+    index = broker_submissions.index(submission)
+    del broker_submissions[index]
+    submission.update(updates)
+    broker_submissions.append(submission)
+    submissions[email] = broker_submissions
+    print(submissions)
