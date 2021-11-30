@@ -37,19 +37,19 @@ const Register = () => {
 	};
 
 	return (
-		<div className='register'>
-			<div className='form-field'>
+		<div className="register">
+			<div className="form-field">
 				Email:
-				<input placeholder='Enter email address' type='email' ref={email}/>
+				<input placeholder="Enter email address" type="email" ref={email}/>
 			</div>
 
-			<div className='form-field'>
+			<div className="form-field">
 				Password:
-				<input placeholder='Enter password' type='password' ref={password}/>
+				<input placeholder="Enter password" type="password" ref={password}/>
 			</div>
 
-			<div className='register-actions'>
-				<button className='register-button' onClick={onSubmit}>
+			<div className="register-actions">
+				<button className="register-button" onClick={onSubmit}>
 					Register
 				</button>
 			</div>

@@ -9,11 +9,11 @@ const App = () => (
 	<AppProvider>
 		<ToastContainer />
 		<BrowserRouter>
-			<div className='App'>
-				<div className='header'>
+			<div className="App">
+				<div className="header">
 					<Navbar/>
 				</div>
-				<div className='content'>
+				<div className="content">
 					<Router/>
 				</div>
 			</div>

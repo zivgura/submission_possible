@@ -4,7 +4,7 @@ const SubmissionActions = ({record, iconsFunction}) => {
 	const actionsInfo = tableUtils.getActionsInfo(record?.actions);
 
 	return (
-		<div className='submission-actions'>
+		<div className="submission-actions">
 			{
 				actionsInfo
 					? actionsInfo.map(iconInfo => (

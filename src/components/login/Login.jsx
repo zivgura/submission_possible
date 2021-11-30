@@ -33,24 +33,24 @@ const Login = () => {
 	};
 
 	return (
-		<div className='login'>
-			<div className='form-field'>
+		<div className="login">
+			<div className="form-field">
 				Email:
-				<input placeholder='Enter email address' type='email' ref={email}/>
+				<input placeholder="Enter email address" type="email" ref={email}/>
 			</div>
 
-			<div className='form-field'>
+			<div className="form-field">
 				Password:
-				<input placeholder='Enter password' type='password' ref={password}/>
+				<input placeholder="Enter password" type="password" ref={password}/>
 			</div>
 
-			<div className='login-actions'>
-				<button className='login-button' onClick={onSubmit}>
+			<div className="login-actions">
+				<button className="login-button" onClick={onSubmit}>
 					Login
 				</button>
 
-				<div className='register-link'>
-					<Link to='/register'>
+				<div className="register-link">
+					<Link to="/register">
 						Not register yet? click here
 					</Link>
 				</div>

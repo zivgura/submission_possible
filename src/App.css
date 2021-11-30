@@ -1,5 +1,7 @@
 .App {
 	text-align: center;
+
+	--currentColor: #000000
 }
 
 .form-field {
@@ -10,3 +12,4 @@
 button {
 	width: fit-content;
 }
+

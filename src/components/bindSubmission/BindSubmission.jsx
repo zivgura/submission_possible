@@ -49,8 +49,8 @@ const BindSubmission = () => {
 	}, [fileState, plainFiles]);
 
 	return (
-		<div className='bind-page'>
-			<div className='loader'>
+		<div className="bind-page">
+			<div className="loader">
 				{
 					loading
 						? <Loader/>

@@ -2,7 +2,7 @@ import ReactLoading from 'react-loading';
 import './loader.css';
 
 const Loader = () => (
-	<div className='loader'>
+	<div className="loader">
 		<ReactLoading
 			type={'spin'}
 			color={'#0eabb7'}
