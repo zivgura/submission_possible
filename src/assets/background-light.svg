@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1395.498" height="1222.974" viewBox="0 0 1395.498 1222.974">
     <style>
         .background{
-        fill: --background-light
+        fill: --background
         }
     </style>
     <path class="background"

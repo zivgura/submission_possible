@@ -3,7 +3,7 @@ import { useTable } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import SubmissionActions from './SubmissionActions';
 import { tableConstants } from '../../constants';
-import { AppContext } from '../../contexts';
+import AppContext from '../../contexts';
 import { ReactComponent as AddIcon } from '../../assets/add-icon.svg';
 import './submissions-table.css';
 
@@ -68,45 +68,47 @@ const SubmissionsTable = () => {
 	} = useTable({columns, data: formattedData});
 
 	return (
-		<div className="table-container">
-			<table {...getTableProps()}>
-				<thead>
-				{
-					headerGroups.map(headerGroup => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
-							{
-								headerGroup.headers.map(column => (
-									<th {...column.getHeaderProps()}>
-										{
-											column.render('Header')
-										}
-									</th>
-								))}
-						</tr>
-					))
-				}
-				</thead>
-				<tbody {...getTableBodyProps()}>
-				{
-					rows.map(row => {
-						prepareRow(row);
-						return (
-							<tr {...row.getRowProps()}>
+		<div className="table-page">
+			<div className="table-container">
+				<table {...getTableProps()}>
+					<thead>
+					{
+						headerGroups.map(headerGroup => (
+							<tr {...headerGroup.getHeaderGroupProps()}>
 								{
-									row.cells.map(cell => (
-										<td {...cell.getCellProps()}>
+									headerGroup.headers.map(column => (
+										<th {...column.getHeaderProps()}>
 											{
-												cell.render('Cell')
+												column.render('Header')
 											}
-										</td>
-									))
-								}
+										</th>
+									))}
 							</tr>
-						);
-					})
-				}
-				</tbody>
-			</table>
+						))
+					}
+					</thead>
+					<tbody {...getTableBodyProps()}>
+					{
+						rows.map(row => {
+							prepareRow(row);
+							return (
+								<tr {...row.getRowProps()} className={rows.indexOf(row) % 2 === 0 ? 'odd' : 'even'}>
+									{
+										row.cells.map(cell => (
+											<td {...cell.getCellProps()}>
+												{
+													cell.render('Cell')
+												}
+											</td>
+										))
+									}
+								</tr>
+							);
+						})
+					}
+					</tbody>
+				</table>
+			</div>
 			<div className="new-submission">
 				<AddIcon className="new-submission-button" onClick={onAddNew}/>
 			</div>

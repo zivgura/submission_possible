@@ -1,5 +1,5 @@
-import bindIcon from '../assets/bind-icon.png';
-import editIcon from '../assets/edit-icon.png';
+import { ReactComponent as BindIcon } from '../assets/bind-icon.svg';
+import { ReactComponent as EditIcon } from '../assets/edit-icon.svg';
 
 const columns = [
 	{
@@ -22,12 +22,12 @@ const columns = [
 
 const actionsInfo = {
 	EDIT: {
-		iconSrc: editIcon,
+		icon: EditIcon,
 		title: 'Edit',
 		accessor: 'EDIT'
 	},
 	BIND: {
-		iconSrc: bindIcon,
+		icon: BindIcon,
 		title: 'Bind',
 		accessor: 'BIND'
 	}

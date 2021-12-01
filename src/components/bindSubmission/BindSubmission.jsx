@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useFilePicker } from 'use-file-picker';
-import { AppContext } from '../../contexts';
+import AppContext from '../../contexts';
 import { toastService, dbService } from '../../services';
-import './bind-submission.css';
 import SubmissionForm from '../submissionForm';
+import './bind-submission.css';
 
 const BindSubmission = () => {
 	const {state} = useContext(AppContext);
@@ -62,7 +62,7 @@ const BindSubmission = () => {
 						<>
 							{plainFiles[0]?.name || null}
 							<button className="upload-button" onClick={onLoadedFile}>
-								upload file
+								Upload file
 							</button>
 						</>
 					)

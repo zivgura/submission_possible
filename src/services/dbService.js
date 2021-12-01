@@ -55,7 +55,7 @@ const updateSubmission = async (email, submissionId, updatedData) => {
 		})
 	});
 
-	return response;
+	return await response.json();
 };
 
 const bindSubmission = async (formData) => {
@@ -99,7 +99,7 @@ const prepareSubmissionForEdit = submissionFromDb => (
 
 const prepareSubmissionForDb = (updatedDetails, submissionFromDb) => ({
 	...submissionFromDb,
-	updatedDetails
+	...updatedDetails
 });
 
 export default {

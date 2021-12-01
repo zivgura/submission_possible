@@ -1,51 +1,61 @@
-import React, { useContext, useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { AppContext } from '../../contexts';
+import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { dbService, toastService } from '../../services';
-import './register.css';
 import { dbUtils } from '../../utils';
+import { emailRegex } from '../../constants';
+import './register.css';
 
 const Register = () => {
-	const history = useHistory();
-	const email = useRef();
-	const password = useRef();
+		const history = useHistory();
+		const email = useRef();
+		const password = useRef();
 
-	const onSuccess = () => {
-		history.push('/login');
-	};
-
-	const onSubmit = () => {
-		const tryRegister = async () => {
-			try {
-				const response = await dbService.tryRegister(email.current.value, password.current.value);
-				dbUtils.handleResponseFromServer(response, onSuccess);
-			} catch (error) {
-				toastService.onError('Failed to register \n Please try again');
-			}
+		const onSuccess = () => {
+			history.push('/login');
 		};
 
-		tryRegister();
-	};
+		const onSubmit = () => {
+			const tryRegister = async () => {
+				if (emailRegex.test(email.current.value)) {
+					try {
+						const response = await dbService.tryRegister(email.current.value, password.current.value);
+						dbUtils.handleResponseFromServer(response, onSuccess);
+					} catch (error) {
+						toastService.onError('Failed to register \n Please try again');
+					}
+				}
+				else {
+					toastService.onError('Email address is invalid \n Please try again');
+				}
+			};
 
-	return (
-		<div className="register">
-			<div className="form-field">
-				Email:
-				<input placeholder="Enter email address" type="email" ref={email}/>
-			</div>
+			tryRegister();
+		};
 
-			<div className="form-field">
-				Password:
-				<input placeholder="Enter password" type="password" ref={password}/>
-			</div>
+		return (
+			<div className="register">
+				<div className="register-container">
+					<h3>
+						Register
+					</h3>
 
-			<div className="register-actions">
-				<button className="register-button" onClick={onSubmit}>
-					Register
-				</button>
+					<div className="form-field">
+						<input placeholder="Email address" type="email" ref={email}/>
+					</div>
+
+					<div className="form-field">
+						<input placeholder="Password" type="password" ref={password}/>
+					</div>
+
+					<div className="register-actions">
+						<button className="register-button" onClick={onSubmit}>
+							Register
+						</button>
+					</div>
+				</div>
 			</div>
-		</div>
-	);
-};
+		);
+	}
+;
 
 export default Register;

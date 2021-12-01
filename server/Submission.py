@@ -1,7 +1,7 @@
 class Submission:
-
-    def __init__(self, submission_id, company_name, physical_address, annual_revenue, signed_application,
-                 submitted_by, status='NEW', actions=['EDIT', 'BOND']):
+    def __init__(self, next_id, submission_id, company_name, physical_address, annual_revenue, signed_application,
+                 submitted_by, status='NEW', actions=['EDIT', 'BIND']):
+        self.next_id = next_id
         self.submission_id = submission_id
         self.company_name = company_name
         self.physical_address = physical_address
@@ -13,7 +13,8 @@ class Submission:
 
     def to_db_format(self):
         return {
-            'id': self.submission_id,
+            'id': self.next_id,
+            'submissionId': self.submission_id,
             'companyName': self.company_name,
             'physicalAddress': self.physical_address,
             'annualRevenue': self.annual_revenue,

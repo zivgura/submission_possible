@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ThemeButton } from '../index';
-import { AppContext } from '../../contexts';
+import AppContext from '../../contexts';
 import { dbService } from '../../services';
 import './navbar.css';
 
@@ -52,10 +52,6 @@ const Navbar = () => {
 				<button onClick={onSubmissionsClick}>
 					My Submissions
 				</button>
-			</div>
-
-			<div className='navbar-right'>
-				<ThemeButton/>
 			</div>
 		</div>
 	);

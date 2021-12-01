@@ -3,11 +3,15 @@ import os
 
 from flask import Flask, jsonify, request
 import uuid
+import itertools
 from flask_cors import CORS
 from server import db, Submission
 
 app = Flask(__name__)
 CORS(app)
+
+
+_counter = itertools.count(4)
 
 
 def add_new_user(username, password):
@@ -16,8 +20,8 @@ def add_new_user(username, password):
 
     if username in db.users:
         return jsonify({
-            'status': 'failure',
-            'message': 'user name or password already exists'
+            "status": "failure",
+            "message": "user name or password already exists"
         })
     else:
         db.users[username] = {
@@ -28,25 +32,31 @@ def add_new_user(username, password):
         db.submissions[username] = []
 
         return jsonify({
-            'status': 'success',
-            'message': 'user name registered successfully'
+            "status": "success",
+            "message": "user name registered successfully"
         })
 
 
 def verify_user(username, password):
-    salt = db.users[username]['salt']
-    key = db.users[username]['key']
-    new_key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+    try:
+        salt = db.users[username]['salt']
+        key = db.users[username]['key']
+        new_key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
-    if key != new_key:
+        if key != new_key:
+            return jsonify({
+                "status": "failure",
+                "message": "user name or password are incorrect"
+            })
+        else:
+            return jsonify({
+                'status': 'success',
+                'message': 'user name and password are correct'
+            })
+    except:
         return jsonify({
-            'status': 'failure',
-            'message': 'user name or password is incorrect'
-        })
-    else:
-        return jsonify({
-            'status': 'success',
-            'message': 'user name and password are correct'
+            "status": "failure",
+            "message": "user name or password are incorrect"
         })
 
 
@@ -66,12 +76,24 @@ def login():
 
 @app.route('/submissions/<email>', methods=['GET'])
 def get_submissions(email):
-    return jsonify({"data": db.get(email)})
+    submission_from_db = db.get(email)
+    if submission_from_db:
+        return jsonify({
+            "status": "success",
+            "data": submission_from_db
+        })
+    else:
+        return jsonify({
+            "status": "failure",
+            "data": None
+        })
 
 
 @app.route('/submission/<submission_id>', methods=['GET'])
 def get_submission_by_id(submission_id):
-    return jsonify({"data": db.get_by_id(submission_id)})
+    return jsonify({
+        "data": db.get_by_id(submission_id)
+    })
 
 
 @app.route('/add', methods=['PUT'])
@@ -79,17 +101,23 @@ def add_submission():
     email = request.json['email']
     data = request.json['data']
 
-    submission_id = uuid.uuid4()
-    company_name = data.companyName
-    physical_address = data.physicalAddress
-    annual_revenue = data.annualRevenue
+    submission_id = uuid.uuid4().__str__()
+    company_name = data['companyName']
+    physical_address = data['physicalAddress']
+    annual_revenue = data['annualRevenue']
     submitted_by = email
 
-    submission = Submission.Submission(submission_id, company_name, physical_address, annual_revenue, None,
+    next_id = next(_counter)
+    submission = Submission.Submission(next_id, submission_id, company_name, physical_address, annual_revenue, None,
                                        submitted_by)
 
+    print(submission.to_db_format())
     db.add(email, submission.to_db_format())
-    return jsonify({"newSubmissionId": submission_id, "status": "added successfully"})
+    return jsonify({
+        "newSubmissionId": submission_id,
+        "message": "added successfully",
+        "status": "success"
+    })
 
 
 @app.route('/update', methods=['POST'])
@@ -98,8 +126,13 @@ def update_submission():
     data = request.json['data']
     submission_id = request.json['submissionId']
 
-    db.update(email, submission_id, data)
-    jsonify({'status': 'updated successfully'})
+    if db.update(email, submission_id, data):
+        return jsonify({
+            "status": "success",
+            "message": "updated successfully"
+        })
+    else:
+        return jsonify({"failure": "did not updated"})
 
 
 @app.route('/bind', methods=['POST'])
@@ -111,12 +144,14 @@ def bind_submission():
 
         update = {
             'signedApplication': signed_application,
-            'status': 'BOUND'
+            'status': 'BOUND',
+            'actions': []
         }
+
         db.update(email, submission_id, update)
-        return jsonify({'status': 'bound successfully'})
+        return jsonify({"status": "bound successfully"})
     except:
-        return jsonify({'status': 'binding failed'})
+        return jsonify({"status": "binding failed"})
 
 
 if __name__ == '__main__':

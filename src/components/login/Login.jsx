@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { AppContext } from '../../contexts';
+import AppContext from '../../contexts';
 import { dbService, toastService } from '../../services';
 import './login.css';
 import { dbUtils } from '../../utils';

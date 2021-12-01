@@ -12,16 +12,27 @@
 	background-size: cover;
 
 
-	--currentColor: #000000;
+	--actionColor: #0eabb7;
 	--textColor: #ffffff;
 	--selectedTextColor: #e7e2e2;
 	--primaryColor: #0eabb7;
-	--background-light: #e9f7f9;
+	--background: #e9f7f9;
 	--base-light: #ffffff;
+	--odd-row: #f4fbfc;
 }
 
 .content {
 	height: 100%;
+}
+
+.content button {
+	width: 180px;
+	height: 30px;
+	cursor: pointer;
+	border: 1px solid;
+	border-radius: 20px;
+	color: var(--textColor);
+	background-color: var(--actionColor);
 }
 
 .form-field {
@@ -37,8 +48,10 @@
 	border-radius: 20px;
 }
 
-button {
-	width: fit-content;
-	cursor: pointer;
+.form-action {
+	padding-top: 1.2rem;
 }
 
+button {
+	cursor: pointer;
+}
