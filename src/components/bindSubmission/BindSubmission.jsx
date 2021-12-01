@@ -17,7 +17,6 @@ const BindSubmission = () => {
 
 	const onLoadedFile = async () => {
 		const {file} = fileState;
-		console.log(file);
 		const formData = new FormData();
 		formData.append('file', file);
 		formData.append('email', email);
