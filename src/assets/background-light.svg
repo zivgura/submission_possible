@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1395.498" height="1222.974" viewBox="0 0 1395.498 1222.974">
+    <style>
+        .background{
+        fill: --background-light
+        }
+    </style>
+    <path class="background"
+          d="M550.893 710.3c-4 0-91.95-303.835 173.906-215.883s343.813 267.854 719.609 105.943a459.964 459.964 0 0 1 27.56-10.865c347.54-123.924 330.146 399.854 14.418 524.586-323.824 127.93-693.624 197.893-935.493-403.781z"
+          transform="rotate(-30 488.232 1533.837)" style="fill:#e9f7f9;opacity:.5"/>
+</svg>

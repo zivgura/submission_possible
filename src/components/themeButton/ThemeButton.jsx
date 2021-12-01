@@ -2,11 +2,11 @@ import { useContext } from 'react';
 import { ThemeContext } from '../../contexts';
 
 const ThemeButton = () => {
-	const {toggle, toggleFunction} = useContext(ThemeContext);
+	const {isDark, toggleFunction} = useContext(ThemeContext);
 
 	return (
 		<button className='theme-button' onClick={toggleFunction}>
-			 toggle theme to {toggle? 'Light' : 'Dark'}
+			 toggle theme to {isDark? 'Dark' : 'Light'}
 		</button>
 	);
 };

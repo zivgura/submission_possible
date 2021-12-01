@@ -14,7 +14,7 @@ const Login = () => {
 
 	const onSuccess = () => {
 		history.push('/login');
-	}
+	};
 
 	const onSubmit = () => {
 		const tryLogin = async () => {
@@ -27,7 +27,7 @@ const Login = () => {
 					const data = submissions?.map(submission =>
 						dbService.prepareSubmissionsForTable(submission)
 					) || []
-						.sort(({id: id1}, {id: id2}) => id1-id2);
+						.sort(({id: id1}, {id: id2}) => id1 - id2);
 
 					setState({
 						...state,
@@ -48,25 +48,29 @@ const Login = () => {
 
 	return (
 		<div className="login">
-			<div className="form-field">
-				Email:
-				<input placeholder="Enter email address" type="email" ref={email}/>
-			</div>
+			<div className="login-container">
+				<h3>
+					Log In
+				</h3>
 
-			<div className="form-field">
-				Password:
-				<input placeholder="Enter password" type="password" ref={password}/>
-			</div>
+				<div className="form-field">
+					<input placeholder="Email" type="email" ref={email}/>
+				</div>
 
-			<div className="login-actions">
-				<button className="login-button" onClick={onSubmit}>
-					Login
-				</button>
+				<div className="form-field">
+					<input placeholder="Password" type="password" ref={password}/>
+				</div>
 
-				<div className="register-link">
-					<Link to="/register">
-						Not register yet? click here
-					</Link>
+				<div className="login-actions">
+					<button className="login-button" onClick={onSubmit}>
+						Login
+					</button>
+
+					<div className="register-link">
+						<Link to="/register">
+							Not register yet? click here
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>

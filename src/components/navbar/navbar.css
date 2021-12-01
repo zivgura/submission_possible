@@ -1,4 +1,24 @@
 .navbar {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	height: 60px;
+	padding: 0 2rem;
+	background: var(--primaryColor);
+}
+
+.navbar button {
+	background: none;
+	border: none;
+	color: var(--textColor);
+}
+
+.navbar button:hover {
+	color: var(--selectedTextColor);
+}
+
+.navbar-right, .navbar-left {
+	display: flex;
+	justify-content: space-between;
+
 }

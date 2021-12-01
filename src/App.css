@@ -1,15 +1,44 @@
-.App {
-	text-align: center;
+#root {
+	height: 100%;
+}
 
-	--currentColor: #000000
+.App {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	height: 100%;
+	background-image: url('./assets/background-light.svg');
+	background-position: center;
+	background-size: cover;
+
+
+	--currentColor: #000000;
+	--textColor: #ffffff;
+	--selectedTextColor: #e7e2e2;
+	--primaryColor: #0eabb7;
+	--background-light: #e9f7f9;
+	--base-light: #ffffff;
+}
+
+.content {
+	height: 100%;
 }
 
 .form-field {
 	display: flex;
 	justify-content: space-between;
+	padding: 0.3rem;
+
+}
+
+.form-field input {
+	padding: 0.4rem 0.5rem;
+	border: 1px solid;
+	border-radius: 20px;
 }
 
 button {
 	width: fit-content;
+	cursor: pointer;
 }
 
