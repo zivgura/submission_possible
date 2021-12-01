@@ -3,6 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
 import { dbService, toastService } from '../../services';
 import './login.css';
+import { dbUtils } from '../../utils';
+
 
 const Login = () => {
 	const history = useHistory();
@@ -10,20 +12,32 @@ const Login = () => {
 	const email = useRef();
 	const password = useRef();
 
+	const onSuccess = () => {
+		history.push('/login');
+	}
+
 	const onSubmit = () => {
 		const tryLogin = async () => {
 			try {
 				const response = await dbService.tryLogin(email.current.value, password.current.value);
-				const {data: submissions} = await dbService.getSubmissions(email.current.value);
-				const data = submissions.map(submission => dbService.prepareSubmissionsForTable(submission));
+				const isExists = dbUtils.handleResponseFromServer(response, onSuccess);
 
-				setState({
-					...state,
-					data,
-					email: email.current.value
-				});
+				if (isExists) {
+					const {data: submissions} = await dbService.getSubmissions(email.current.value);
+					const data = submissions?.map(submission =>
+						dbService.prepareSubmissionsForTable(submission)
+					) || []
+						.sort(({id: id1}, {id: id2}) => id1-id2);
 
-				history.push('/submissions');
+					setState({
+						...state,
+						data,
+						email: email.current.value,
+						currentPage: 'Submissions'
+					});
+
+					history.push('/submissions');
+				}
 			} catch (error) {
 				toastService.onError('Failed to log in \n Please try again');
 			}

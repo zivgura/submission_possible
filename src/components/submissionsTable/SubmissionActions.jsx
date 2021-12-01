@@ -6,15 +6,19 @@ const SubmissionActions = ({record, iconsFunction}) => {
 	return (
 		<div className="submission-actions">
 			{
-				actionsInfo
+				actionsInfo.length > 0
 					? actionsInfo.map(iconInfo => (
-						<img
-							key={record.id+iconInfo.title}
-							src={iconInfo.iconSrc}
-							title={iconInfo.title}
-							onClick={() => iconsFunction[iconInfo.accessor](record)}
-							alt={iconInfo.title}
-						/>
+						iconInfo
+							? (
+								<img
+									key={record.id + iconInfo.title}
+									src={iconInfo.iconSrc}
+									title={iconInfo.title}
+									onClick={() => iconsFunction[iconInfo.accessor](record)}
+									alt={iconInfo.title}
+								/>
+							)
+							: null
 					))
 					: null
 			}

@@ -8,6 +8,7 @@ import './App.css';
 const App = () => (
 	<AppProvider>
 		<ToastContainer />
+
 		<BrowserRouter>
 			<div className="App">
 				<div className="header">

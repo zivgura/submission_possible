@@ -10,7 +10,7 @@ const tryLogin = async (email, password) => {
 		})
 	});
 
-	return response;
+	return await response.json();
 };
 
 const tryRegister = async (email, password) => {
@@ -41,7 +41,7 @@ const getSubmissionById = async (submissionId) => {
 		headers: {'Content-Type': 'application/json'}
 	});
 
-	return response;
+	return await response.json();
 };
 
 const updateSubmission = async (email, submissionId, updatedData) => {
@@ -77,12 +77,13 @@ const addNewSubmission = async (email, submission) => {
 		})
 	});
 
-	return response;
+	return await response.json();
 };
 
 const prepareSubmissionsForTable = submissionFromDb => (
 	{
-		id: submissionFromDb.id,
+		id:submissionFromDb.id,
+		submissionId: submissionFromDb.submissionId,
 		status: submissionFromDb.status,
 		actions: submissionFromDb.actions
 	}

@@ -3,31 +3,22 @@ import { Link, useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
 import { dbService, toastService } from '../../services';
 import './register.css';
-
-const SUCCESS = 'success'
-const FAILURE = 'failure'
+import { dbUtils } from '../../utils';
 
 const Register = () => {
 	const history = useHistory();
 	const email = useRef();
 	const password = useRef();
 
+	const onSuccess = () => {
+		history.push('/login');
+	};
+
 	const onSubmit = () => {
 		const tryRegister = async () => {
 			try {
 				const response = await dbService.tryRegister(email.current.value, password.current.value);
-
-				switch (response.status) {
-					case SUCCESS:
-						toastService.onSuccess('You have been registered successfully');
-						history.push('/login');
-						break;
-					case FAILURE:
-						toastService.onError(`Failed to register in \n ${response.message}`);
-						break;
-					default:
-						toastService.onError('Something went wrong \n Please try again');
-				}
+				dbUtils.handleResponseFromServer(response, onSuccess);
 			} catch (error) {
 				toastService.onError('Failed to register \n Please try again');
 			}

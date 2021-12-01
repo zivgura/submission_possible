@@ -1,3 +1,10 @@
+.table-container {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	padding: 13% 30%;
+}
+
 .submission-actions {
 	display: flex;
 }
@@ -5,5 +12,17 @@
 .submission-actions img {
 	height: 1.2rem;
 	width: 1.2rem;
+	cursor: pointer;
+}
+
+.new-submission {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.new-submission-button {
+	height: 2rem;
+	width: 2rem;
+	color: var(--currentColor);
 	cursor: pointer;
 }

@@ -2,8 +2,9 @@ import { useContext, useMemo } from 'react';
 import { useTable } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import SubmissionActions from './SubmissionActions';
-import tableConstants from '../../constants';
+import { tableConstants } from '../../constants';
 import { AppContext } from '../../contexts';
+import { ReactComponent as AddIcon } from '../../assets/add-icon.svg';
 import './submissions-table.css';
 
 const SubmissionsTable = () => {
@@ -12,20 +13,31 @@ const SubmissionsTable = () => {
 	const {data} = state;
 	const {columns} = tableConstants;
 
+	const onAddNew = () => {
+		setState({
+			...state,
+			currentPage: 'New',
+		});
+
+		history.push('/submission');
+	};
+
 	const iconsFunction = useMemo(() => {
 		const onEdit = (record) => {
 			setState({
 				...state,
-				currentRecordId: record.id
+				currentRecordId: record.submissionId,
+				currentPage: 'Edit'
 			});
 
-			history.push('/submission', 'Edit');
+			history.push('/submission');
 		};
 
 		const onBind = (record) => {
 			setState({
 				...state,
-				currentRecordId: record.id
+				currentRecordId: record.submissionId,
+				currentPage: 'Bind'
 			});
 
 			history.push('/bind');
@@ -43,7 +55,9 @@ const SubmissionsTable = () => {
 			actions: (
 				<SubmissionActions record={record} iconsFunction={iconsFunction}/>
 			)
-		}))), [data, iconsFunction]);
+		}))
+			.sort(({id: id1}, {id: id2}) => id1 - id2)
+	), [data, iconsFunction]);
 
 	const {
 		getTableProps,
@@ -54,44 +68,49 @@ const SubmissionsTable = () => {
 	} = useTable({columns, data: formattedData});
 
 	return (
-		<table {...getTableProps()}>
-			<thead>
-			{
-				headerGroups.map(headerGroup => (
-					<tr {...headerGroup.getHeaderGroupProps()}>
-						{
-							headerGroup.headers.map(column => (
-								<th {...column.getHeaderProps()}>
-									{
-										column.render('Header')
-									}
-								</th>
-							))}
-					</tr>
-				))
-			}
-			</thead>
-			<tbody {...getTableBodyProps()}>
-			{
-				rows.map(row => {
-					prepareRow(row);
-					return (
-						<tr {...row.getRowProps()}>
+		<div className="table-container">
+			<table {...getTableProps()}>
+				<thead>
+				{
+					headerGroups.map(headerGroup => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
 							{
-								row.cells.map(cell => (
-									<td {...cell.getCellProps()}>
+								headerGroup.headers.map(column => (
+									<th {...column.getHeaderProps()}>
 										{
-											cell.render('Cell')
+											column.render('Header')
 										}
-									</td>
-								))
-							}
+									</th>
+								))}
 						</tr>
-					);
-				})
-			}
-			</tbody>
-		</table>
+					))
+				}
+				</thead>
+				<tbody {...getTableBodyProps()}>
+				{
+					rows.map(row => {
+						prepareRow(row);
+						return (
+							<tr {...row.getRowProps()}>
+								{
+									row.cells.map(cell => (
+										<td {...cell.getCellProps()}>
+											{
+												cell.render('Cell')
+											}
+										</td>
+									))
+								}
+							</tr>
+						);
+					})
+				}
+				</tbody>
+			</table>
+			<div className="new-submission">
+				<AddIcon className="new-submission-button" onClick={onAddNew}/>
+			</div>
+		</div>
 	);
 };
 

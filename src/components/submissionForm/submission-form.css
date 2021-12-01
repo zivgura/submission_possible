@@ -1,0 +1,7 @@
+input.not-editable {
+	border: none;
+}
+
+button.not-editable {
+	display: none;
+}

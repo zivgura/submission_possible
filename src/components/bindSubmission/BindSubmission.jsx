@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useFilePicker } from 'use-file-picker';
 import { AppContext } from '../../contexts';
-import { Loader } from '../../components';
 import { toastService, dbService } from '../../services';
 import './bind-submission.css';
+import SubmissionForm from '../submissionForm';
 
 const BindSubmission = () => {
 	const {state} = useContext(AppContext);
 	const [fileState, setFileState] = useState({});
 	const {currentRecordId, email} = state;
 
-	const [openFileSelector, {plainFiles, loading}] = useFilePicker({
+	const [openFileSelector, {plainFiles}] = useFilePicker({
 		accept: '.pdf',
 		multiple: false
 	});
@@ -50,23 +50,21 @@ const BindSubmission = () => {
 
 	return (
 		<div className="bind-page">
-			<div className="loader">
-				{
-					loading
-						? <Loader/>
-						: null
-				}
-			</div>
-			<button className='bind-button' onClick={openFileSelector}>
+			<SubmissionForm editable={false}/>
+
+			<button className="bind-button" onClick={openFileSelector}>
 				Select file
 			</button>
 			{
 				fileState.fileSelected
 					?
 					(
-						<button className='upload-button' onClick={onLoadedFile}>
-							upload file
-						</button>
+						<>
+							{plainFiles[0]?.name || null}
+							<button className="upload-button" onClick={onLoadedFile}>
+								upload file
+							</button>
+						</>
 					)
 					: null
 			}

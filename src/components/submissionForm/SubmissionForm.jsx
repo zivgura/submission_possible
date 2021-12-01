@@ -1,23 +1,19 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts';
-import dbService from '../../services/dbService';
+import { dbService, toastService } from '../../services';
+import { dbUtils } from '../../utils';
+import { NOOP } from '../../constants';
+import './submission-form.css'
 
-const SubmissionForm = () => {
+const SubmissionForm = ({editable = true}) => {
 	const history = useHistory();
-	const formPurpose = history.location.state;
 	const {state, setState} = useContext(AppContext);
-	const {submissionFromDb, setSubmissionFromDb} = useState(null);
+	const {currentPage} = state;
+	const [submissionFromDb, setSubmissionFromDb] = useState(null);
 	const companyNameRef = useRef();
 	const physicalAddressRef = useRef();
 	const annualRevenueRef = useRef();
-
-	const getSubmissionDetails = async (submissionId) => {
-		const response = await dbService.getSubmissionById(submissionId);
-		const {data} = await response.json();
-		setSubmissionFromDb(data[0]);
-		return dbService.prepareSubmissionForEdit(data[0]);
-	};
 
 	const onSave = async () => {
 		const updatedDetails = {
@@ -26,66 +22,82 @@ const SubmissionForm = () => {
 			annualRevenue: annualRevenueRef.current.value
 		};
 
-		if (formPurpose === 'edit') {
-			const submissionForDb = dbService.prepareSubmissionForDb(updatedDetails, submissionFromDb);
+		if (currentPage === 'Edit') {
+			const submissionForDb = dbService.prepareSubmissionForDb(updatedDetails, submissionFromDb.submission);
 			await dbService.updateSubmission(state.email, submissionForDb);
 
 			setState({
 				...state,
-				currentRecordId: null
+				currentRecordId: null,
+				currentPage: 'Submissions'
 			});
 
+			setSubmissionFromDb(null);
 			history.push('/submissions');
 		}
 		else {
-			const response = await dbService.addNewSubmission(state.email, updatedDetails);
-			const {newSubmissionId} = await response.json();
+			try {
+				const response = await dbService.addNewSubmission(state.email, updatedDetails);
+				const isExists = dbUtils.handleResponseFromServer(response, NOOP);
 
-			setState({
-				...state,
-				currentRecordId: newSubmissionId
-			});
+				if(isExists) {
+					const {newSubmissionId} = response;
+					console.log(newSubmissionId);
 
-			history.push('/bind');
+					setState({
+						...state,
+						currentRecordId: newSubmissionId,
+						currentPage: 'Bind'
+					});
+
+					history.push('/bind');
+				}
+			} catch {
+				toastService.onError('Something went wrong \n Please try again');
+			}
 		}
 	};
 
 	useEffect(() => {
 		const getDetails = async () => {
-			const {currentRecordId} = state;
-
-			const recordInfo = currentRecordId
-				? await getSubmissionDetails(currentRecordId)
-				: {};
-
-			companyNameRef.current.value = recordInfo.companyName;
-			physicalAddressRef.current.value = recordInfo.physicalAddress;
-			annualRevenueRef.current.value = recordInfo.annualRevenue;
+			if (state.currentRecordId) {
+				const {data} = await dbService.getSubmissionById(state.currentRecordId);
+				setSubmissionFromDb(data[0]);
+			}
 		};
 
 		getDetails();
-	}, [state]);
+	}, [state.currentRecordId]);
+
+	useEffect(() => {
+		if (submissionFromDb) {
+			const recordInfo = dbService.prepareSubmissionForEdit(submissionFromDb);
+			companyNameRef.current.value = recordInfo?.companyName;
+			physicalAddressRef.current.value = recordInfo?.physicalAddress;
+			annualRevenueRef.current.value = recordInfo?.annualRevenue;
+		}
+	}, [submissionFromDb])
 
 	return (
 		<div>
-			<h2>{`${formPurpose} submission`}</h2>
-			<div className='submission-form'>
-				<div className='submission-form-field'>
+			<h2>{`${currentPage} submission`}</h2>
+			<div className="submission-form">
+				<div className="submission-form-field">
 					Company name:
-					<input placeholder='Enter company name' type='text' ref={companyNameRef}/>
+					<input placeholder="Enter company name" type="text" className={editable ? 'editable' : 'not-editable'} ref={companyNameRef}/>
 				</div>
 
-				<div className='submission-form-field'>
+				<div className="submission-form-field">
 					Physical address:
-					<input placeholder='Enter physical address' type='text' ref={physicalAddressRef}/>
+					<input placeholder="Enter physical address" type="text" className={editable ? 'editable' : 'not-editable'} ref={physicalAddressRef}/>
 				</div>
 
-				<div className='submission-form-field'>
+				<div className="submission-form-field">
 					Annual revenue:
-					<input placeholder='Enter annual revenue' type='text' ref={annualRevenueRef}/>
+					<input placeholder="Enter annual revenue" type="text" className={editable ? 'editable' : 'not-editable'} ref={annualRevenueRef}/>
 				</div>
 
-				<button onClick={onSave}>
+				<button onClick={onSave} className={editable ? 'editable' : 'not-editable'}>
 					Save
 				</button>
 			</div>

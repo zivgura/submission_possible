@@ -20,9 +20,11 @@ const Navbar = () => {
 
 	const onSubmissionsClick = async () => {
 		const {data} = await dbService.getSubmissions(state.email);
+
 		setState({
 			...state,
-			data
+			data,
+			currentRecordId: null
 		});
 
 		history.push('/submissions');

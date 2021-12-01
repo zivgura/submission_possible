@@ -1,12 +1,14 @@
-import { useContext } from 'react';
-import { AppContext } from '../contexts';
 import bindIcon from '../assets/bind-icon.png';
 import editIcon from '../assets/edit-icon.png';
 
 const columns = [
 	{
-		Header: 'Submission ID',
+		Header: '#',
 		accessor: 'id'
+	},
+	{
+		Header: 'Submission ID',
+		accessor: 'submissionId'
 	},
 	{
 		Header: 'Status',
